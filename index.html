@@ -17,9 +17,21 @@
         #slideshow-modal {
             transition: opacity 0.3s ease;
         }
+        .slide-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
         #slide-img {
+            max-width: 100%;
+            max-height: 100vh;
+            object-fit: contain;
             transition: opacity 0.8s ease-in-out, transform 6s ease-in-out;
             will-change: transform, opacity;
+            transform-origin: center center;
         }
         .zoom-in { transform: scale(1.1); }
         .zoom-out { transform: scale(1.0); }
@@ -118,7 +130,9 @@
         </button>
         
         <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
-            <img id="slide-img" src="" alt="Slideshow" class="max-h-screen max-w-full object-contain opacity-0 transform scale-100">
+            <div class="slide-container">
+                <img id="slide-img" src="" alt="Slideshow" class="opacity-0 transform scale-100">
+            </div>
         </div>
 
         <div class="absolute bottom-10 text-white text-center">
@@ -220,26 +234,33 @@
             const caption = document.getElementById('slide-caption');
             const images = galleries[currentSlideFolder];
 
-            // Reset opacity and zoom for transition
+            // Reset opacity and remove zoom classes to reset state
+            img.style.transition = 'none'; // Disable transition for instant reset
             img.style.opacity = '0';
+            img.classList.remove('zoom-in', 'zoom-out');
             
+            // Force reflow
+            void img.offsetWidth;
+
             setTimeout(() => {
                 const filename = images[currentSlideIndex];
                 img.src = `images/${currentSlideFolder}/${filename}`;
                 caption.textContent = filename.replace(/Lulu_Bali_|Lulu_|.jpg/g, '').replace(/_/g, ' ');
                 
+                // Re-enable transitions
+                img.style.transition = 'opacity 0.8s ease-in-out, transform 6s ease-in-out';
+                
                 // Fade in
                 img.style.opacity = '1';
                 
-                // Toggle Zoom effect (Ken Burns style)
-                img.classList.remove('zoom-in', 'zoom-out');
-                // Force reflow
-                void img.offsetWidth;
+                // Apply Zoom effect
+                // We use a small timeout to ensure the browser registers the initial state before applying the transform
+                requestAnimationFrame(() => {
+                    zoomToggle = !zoomToggle;
+                    img.classList.add(zoomToggle ? 'zoom-in' : 'zoom-out');
+                });
                 
-                zoomToggle = !zoomToggle;
-                img.classList.add(zoomToggle ? 'zoom-in' : 'zoom-out');
-                
-            }, 300); // Wait for fade out
+            }, 50); // Small delay to allow reset
         }
 
         function nextSlide() {
