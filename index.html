@@ -12,6 +12,17 @@
         /* Smooth fade-in */
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Slideshow Styles */
+        #slideshow-modal {
+            transition: opacity 0.3s ease;
+        }
+        #slide-img {
+            transition: opacity 0.8s ease-in-out, transform 6s ease-in-out;
+            will-change: transform, opacity;
+        }
+        .zoom-in { transform: scale(1.1); }
+        .zoom-out { transform: scale(1.0); }
     </style>
 </head>
 <body class="bg-amber-50 text-gray-800">
@@ -41,9 +52,17 @@
 
         <!-- Bali Section -->
         <section id="bali">
-            <div class="flex items-center gap-4 mb-6">
-                <h3 class="text-3xl font-bold text-gray-800">🌴 Bali Adventure (2026-02-03)</h3>
-                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">Vacation</span>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <h3 class="text-3xl font-bold text-gray-800">🌴 Bali Adventure (2026-02-03)</h3>
+                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">Vacation</span>
+                </div>
+                <button onclick="startSlideshow('bali')" class="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full shadow transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                    </svg>
+                    Play Slideshow
+                </button>
             </div>
             <div class="columns-1 sm:columns-2 lg:columns-3 gap-6" id="bali-gallery">
                 <!-- Images injected via JS -->
@@ -52,9 +71,17 @@
 
         <!-- North Coast Section -->
         <section id="northcoast">
-            <div class="flex items-center gap-4 mb-6">
-                <h3 class="text-3xl font-bold text-gray-800">🌊 North Coast (2026-01-29)</h3>
-                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">Seaside</span>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <h3 class="text-3xl font-bold text-gray-800">🌊 North Coast (2026-01-29)</h3>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">Seaside</span>
+                </div>
+                <button onclick="startSlideshow('northcoast')" class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full shadow transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                    </svg>
+                    Play Slideshow
+                </button>
             </div>
             <div class="columns-1 sm:columns-2 lg:columns-3 gap-6" id="northcoast-gallery">
                  <!-- Images injected via JS -->
@@ -63,9 +90,17 @@
 
          <!-- Pinglin Section -->
         <section id="pinglin">
-            <div class="flex items-center gap-4 mb-6">
-                <h3 class="text-3xl font-bold text-gray-800">🍵 Pinglin Tea Fields (2026-01-30)</h3>
-                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold">Nature</span>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-4">
+                    <h3 class="text-3xl font-bold text-gray-800">🍵 Pinglin Tea Fields (2026-01-30)</h3>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold">Nature</span>
+                </div>
+                <button onclick="startSlideshow('pinglin')" class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-full shadow transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                    </svg>
+                    Play Slideshow
+                </button>
             </div>
             <div class="columns-1 sm:columns-2 lg:columns-3 gap-6" id="pinglin-gallery">
                  <!-- Images injected via JS -->
@@ -73,6 +108,28 @@
         </section>
 
     </main>
+
+    <!-- Slideshow Modal -->
+    <div id="slideshow-modal" class="fixed inset-0 bg-black bg-opacity-95 z-[100] hidden flex flex-col justify-center items-center">
+        <button onclick="stopSlideshow()" class="absolute top-6 right-6 text-white hover:text-gray-300 z-50">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        
+        <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
+            <img id="slide-img" src="" alt="Slideshow" class="max-h-screen max-w-full object-contain opacity-0 transform scale-100">
+        </div>
+
+        <div class="absolute bottom-10 text-white text-center">
+            <p id="slide-caption" class="text-xl font-semibold mb-2 shadow-black drop-shadow-md"></p>
+            <div class="flex gap-4 justify-center">
+                 <button onclick="prevSlide()" class="p-2 hover:bg-white/20 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
+                 <button onclick="togglePause()" id="pause-btn" class="p-2 hover:bg-white/20 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg></button>
+                 <button onclick="nextSlide()" class="p-2 hover:bg-white/20 rounded-full"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></button>
+            </div>
+        </div>
+    </div>
 
     <footer class="bg-gray-800 text-gray-400 py-8 text-center mt-12">
         <p>Made with ❤️ by Juju for Lulu & Papa</p>
@@ -120,7 +177,7 @@
             }
 
             container.innerHTML = images.map(img => `
-                <div class="gallery-item fade-in bg-white p-2 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                <div class="gallery-item fade-in bg-white p-2 rounded-xl shadow-md hover:shadow-lg transition duration-300 cursor-pointer" onclick="openLightbox('${folder}', '${img}')">
                     <img src="images/${folder}/${img}" alt="${img}" class="rounded-lg w-full object-cover">
                     <p class="mt-2 text-center text-xs text-gray-400 truncate px-2">${img.replace(/Lulu_Bali_|Lulu_|.jpg/g, '').replace(/_/g, ' ')}</p>
                 </div>
@@ -130,4 +187,108 @@
         renderGallery('bali-gallery', 'bali', galleries.bali);
         renderGallery('northcoast-gallery', 'northcoast', galleries.northcoast);
         renderGallery('pinglin-gallery', 'pinglin', galleries.pinglin);
+
+        /* Slideshow Logic */
+        let currentSlideIndex = 0;
+        let currentSlideFolder = '';
+        let slideInterval = null;
+        let isPaused = false;
+        let zoomToggle = false;
+
+        function startSlideshow(folder) {
+            currentSlideFolder = folder;
+            currentSlideIndex = 0;
+            document.getElementById('slideshow-modal').classList.remove('hidden');
+            showSlide();
+            isPaused = false;
+            updatePauseIcon();
+            // Start automatic playing
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5000); // 5 seconds per slide
+        }
+
+        function stopSlideshow() {
+            document.getElementById('slideshow-modal').classList.add('hidden');
+            clearInterval(slideInterval);
+            // Reset zoom
+            const img = document.getElementById('slide-img');
+            img.classList.remove('zoom-in', 'zoom-out');
+        }
+
+        function showSlide() {
+            const img = document.getElementById('slide-img');
+            const caption = document.getElementById('slide-caption');
+            const images = galleries[currentSlideFolder];
+
+            // Reset opacity and zoom for transition
+            img.style.opacity = '0';
+            
+            setTimeout(() => {
+                const filename = images[currentSlideIndex];
+                img.src = `images/${currentSlideFolder}/${filename}`;
+                caption.textContent = filename.replace(/Lulu_Bali_|Lulu_|.jpg/g, '').replace(/_/g, ' ');
+                
+                // Fade in
+                img.style.opacity = '1';
+                
+                // Toggle Zoom effect (Ken Burns style)
+                img.classList.remove('zoom-in', 'zoom-out');
+                // Force reflow
+                void img.offsetWidth;
+                
+                zoomToggle = !zoomToggle;
+                img.classList.add(zoomToggle ? 'zoom-in' : 'zoom-out');
+                
+            }, 300); // Wait for fade out
+        }
+
+        function nextSlide() {
+            const images = galleries[currentSlideFolder];
+            currentSlideIndex = (currentSlideIndex + 1) % images.length;
+            showSlide();
+        }
+
+        function prevSlide() {
+            const images = galleries[currentSlideFolder];
+            currentSlideIndex = (currentSlideIndex - 1 + images.length) % images.length;
+            showSlide();
+            // Reset timer if manually changed
+            if (!isPaused) {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            updatePauseIcon();
+            if (isPaused) {
+                clearInterval(slideInterval);
+            } else {
+                nextSlide();
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+        }
+
+        function updatePauseIcon() {
+            const btn = document.getElementById('pause-btn');
+            if (isPaused) {
+                // Play Icon
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /></svg>';
+            } else {
+                // Pause Icon
+                btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>';
+            }
+        }
+
+        // Allow clicking individual images to start slideshow from there (optional, using Play button mainly)
+        function openLightbox(folder, imgName) {
+            currentSlideFolder = folder;
+            const images = galleries[folder];
+            currentSlideIndex = images.indexOf(imgName);
+            document.getElementById('slideshow-modal').classList.remove('hidden');
+            showSlide();
+            isPaused = true; // Start paused if clicked manually
+            updatePauseIcon();
+        }
     </script>
