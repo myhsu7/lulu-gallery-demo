@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lulu's Adventures 🦜✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
+        body { font-family: 'Nunito', sans-serif; }
+        .gallery-item { break-inside: avoid; margin-bottom: 1.5rem; }
+        /* Smooth fade-in */
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-orange-500 flex items-center gap-2">
+                <span>🦜</span> Lulu's Adventures
+            </h1>
+            <nav class="space-x-4 text-sm font-medium">
+                <a href="#bali" class="hover:text-orange-500 transition">Bali</a>
+                <a href="#northcoast" class="hover:text-orange-500 transition">North Coast</a>
+                <a href="#pinglin" class="hover:text-orange-500 transition">Pinglin</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="bg-orange-100 py-12 text-center">
+        <h2 class="text-4xl font-bold mb-2 text-orange-600">Lulu 出去玩！</h2>
+        <p class="text-lg text-gray-600">跟著可愛的 Lulu 一起探索世界 🌍✨</p>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-16">
+
+        <!-- Bali Section -->
+        <section id="bali">
+            <div class="flex items-center gap-4 mb-6">
+                <h3 class="text-3xl font-bold text-gray-800">🌴 Bali Adventure (2026-02-03)</h3>
+                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold">Vacation</span>
+            </div>
+            <div class="columns-1 sm:columns-2 lg:columns-3 gap-6" id="bali-gallery">
+                <!-- Images injected via JS -->
+            </div>
+        </section>
+
+        <!-- North Coast Section -->
+        <section id="northcoast">
+            <div class="flex items-center gap-4 mb-6">
+                <h3 class="text-3xl font-bold text-gray-800">🌊 North Coast (2026-01-29)</h3>
+                <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">Seaside</span>
+            </div>
+            <div class="columns-1 sm:columns-2 lg:columns-3 gap-6" id="northcoast-gallery">
+                 <!-- Images injected via JS -->
+            </div>
+        </section>
+
+         <!-- Pinglin Section -->
+        <section id="pinglin">
+            <div class="flex items-center gap-4 mb-6">
+                <h3 class="text-3xl font-bold text-gray-800">🍵 Pinglin Tea Fields (2026-01-30)</h3>
+                <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold">Nature</span>
+            </div>
+            <div class="columns-1 sm:columns-2 lg:columns-3 gap-6" id="pinglin-gallery">
+                 <!-- Images injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-gray-400 py-8 text-center mt-12">
+        <p>Made with ❤️ by Juju for Lulu & Papa</p>
+    </footer>
+
+    <script>
+        const galleries = {
+            bali: [
+                "Lulu_Bali_CityView.jpg", "Lulu_Bali_Grass.jpg", "Lulu_Bali_FamilySelfie.jpg",
+                "Lulu_Bali_FamilySelfie_2.jpg", "Lulu_Bali_FamilySelfie_3.jpg", "Lulu_Bali_Grass_Close.jpg",
+                "Lulu_Bali_Grass_Portrait.jpg", "Lulu_Bali_Landscape.jpg", "Lulu_Bali_Overlook.jpg",
+                "Lulu_Bali_PalmTree.jpg", "Lulu_Bali_PineCones.jpg", "Lulu_Bali_Sign_Landscape.jpg",
+                "Lulu_Bali_WoodenBench.jpg"
+            ],
+            northcoast: [], // Add filenames if found
+            pinglin: []     // Add filenames if found
+        };
+
+        function renderGallery(id, folder, images) {
+            const container = document.getElementById(id);
+            if (!container || images.length === 0) {
+                 if (container) container.innerHTML = '<p class="text-gray-400 italic">No photos found yet...</p>';
+                 return;
+            }
+
+            container.innerHTML = images.map(img => `
+                <div class="gallery-item fade-in bg-white p-2 rounded-xl shadow-md hover:shadow-lg transition duration-300">
+                    <img src="images/${folder}/${img}" alt="${img}" class="rounded-lg w-full object-cover">
+                    <p class="mt-2 text-center text-xs text-gray-400 truncate px-2">${img.replace(/Lulu_Bali_|Lulu_|.jpg/g, '').replace(/_/g, ' ')}</p>
+                </div>
+            `).join('');
+        }
+
+        renderGallery('bali-gallery', 'bali', galleries.bali);
+        renderGallery('northcoast-gallery', 'northcoast', galleries.northcoast);
+        renderGallery('pinglin-gallery', 'pinglin', galleries.pinglin);
+    </script>
