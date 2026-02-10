@@ -29,12 +29,30 @@
             max-width: 100%;
             max-height: 100vh;
             object-fit: contain;
-            transition: opacity 0.8s ease-in-out, transform 6s ease-in-out;
-            will-change: transform, opacity;
-            transform-origin: center center;
+            opacity: 0; /* Hidden by default until loaded */
         }
-        .zoom-in { transform: scale(1.1); }
-        .zoom-out { transform: scale(1.0); }
+        
+        /* Ken Burns Animations */
+        @keyframes kenBurnsIn {
+            from { transform: scale(1.0); }
+            to { transform: scale(1.15); }
+        }
+        @keyframes kenBurnsOut {
+            from { transform: scale(1.15); }
+            to { transform: scale(1.0); }
+        }
+        
+        .fx-zoom-in {
+            animation: kenBurnsIn 6s ease-out forwards;
+        }
+        .fx-zoom-out {
+            animation: kenBurnsOut 6s ease-out forwards;
+        }
+        
+        /* Fade Transition */
+        .fade-transition {
+            transition: opacity 1s ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-amber-50 text-gray-800">
@@ -233,34 +251,34 @@
             const img = document.getElementById('slide-img');
             const caption = document.getElementById('slide-caption');
             const images = galleries[currentSlideFolder];
+            const filename = images[currentSlideIndex];
 
-            // Reset opacity and remove zoom classes to reset state
-            img.style.transition = 'none'; // Disable transition for instant reset
+            // 1. Fade OUT old image
             img.style.opacity = '0';
-            img.classList.remove('zoom-in', 'zoom-out');
             
-            // Force reflow
-            void img.offsetWidth;
-
+            // Wait for fade out to complete (500ms) before swapping source
             setTimeout(() => {
-                const filename = images[currentSlideIndex];
+                // 2. Prepare NEW image state (hidden, no animation)
+                img.classList.remove('fade-transition', 'fx-zoom-in', 'fx-zoom-out');
                 img.src = `images/${currentSlideFolder}/${filename}`;
                 caption.textContent = filename.replace(/Lulu_Bali_|Lulu_|.jpg/g, '').replace(/_/g, ' ');
-                
-                // Re-enable transitions
-                img.style.transition = 'opacity 0.8s ease-in-out, transform 6s ease-in-out';
-                
-                // Fade in
-                img.style.opacity = '1';
-                
-                // Apply Zoom effect
-                // We use a small timeout to ensure the browser registers the initial state before applying the transform
-                requestAnimationFrame(() => {
+
+                // 3. When image is loaded, start Fade IN + Ken Burns
+                img.onload = () => {
+                    // Force reflow
+                    void img.offsetWidth;
+                    
+                    // Add transition class for opacity
+                    img.classList.add('fade-transition');
+                    
+                    // Choose random zoom direction
                     zoomToggle = !zoomToggle;
-                    img.classList.add(zoomToggle ? 'zoom-in' : 'zoom-out');
-                });
-                
-            }, 50); // Small delay to allow reset
+                    img.classList.add(zoomToggle ? 'fx-zoom-in' : 'fx-zoom-out');
+                    
+                    // Trigger Fade IN
+                    img.style.opacity = '1';
+                };
+            }, 500); // 0.5s fade out time
         }
 
         function nextSlide() {
